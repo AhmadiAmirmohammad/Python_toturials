@@ -6,6 +6,14 @@ class UserRoles(Enum):
     EDITOR = 2
     ADMIN = 3
 
+class Document:
+    def __init__(self, curreent_user_role: UserRoles):
+        self.state = DraftState(self)
+        self.current_user_role = curreent_user_role
+
+    def publish(self):
+        self.state.publish()
+
 
 from abc import ABC, abstractmethod
 class State(ABC):
@@ -38,16 +46,6 @@ class PublishState(State):
     def publish(self):
         if self._document.current_user_role == UserRoles.ADMIN:
             pass
-
-
-class Document:
-    def __init__(self, curreent_user_role: UserRoles):
-        self.state = DraftState(self)
-        self.current_user_role = curreent_user_role
-
-    def publish(self):
-        self.state.publish()
-
 
 doc = Document(UserRoles.EDITOR)
 print(doc.state.__class__.__name__)
